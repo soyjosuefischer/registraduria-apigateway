@@ -147,7 +147,7 @@ Para correr este proyecto localmente debes seguir los siguientes pasos:
     $ git clone https://github.com/iamjosuefischer/registraduria-apigateway.git
 
 ### 2. Instalar paquetes y ejecutar el proyecto
-Abrir el proyecto en el IDE de PyCharm para la instalación automatica de los paquetes del proyecto y posteriormente correrlo localmente.
+Abrir el proyecto en el IDE de PyCharm para la instalación automática de los paquetes del proyecto y posteriormente correrlo localmente.
 
 ## Repositorios de este proyecto
 
