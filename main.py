@@ -18,48 +18,45 @@ cors = CORS(app)
 app.config["JWT_SECRET_KEY"] = "code-dev"
 jwt = JWTManager(app)
 
-
 ############################
 # Implementación del Login #
 ############################
 
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods = ["POST"])
 def create_token():
     data = request.get_json()
     headers = {"Content-Type": "application/json; charset=utf-8"}
     url = dataConfig["url-backend-seguridad"] + '/usuarios/validar'
-    response = requests.post(url,  headers=headers, json=data)
+    response = requests.post(url,  headers = headers, json = data)
 
     if response.status_code == 200:
         user = response.json()
-        expires = datetime.timedelta(seconds=60 * 60 * 24)
+        expires = datetime.timedelta(seconds = 60 * 60 * 24)
         access_token = create_access_token(
-            identity=user, expires_delta=expires)
+            identity = user, expires_delta = expires)
         return jsonify({"token": access_token, "user_id": user["_id"]})
     else:
         return jsonify({"msg": "Error en usuario o contrasena"}), 401
-
 
 ####################################
 # Implementación Creación de usuario
 ####################################
 
-@app.route("/singup", methods=["POST"])
+@app.route("/singup", methods = ["POST"])
 def create_user():
     data = request.get_json()
     headers = {"Content-Type": "application/json; charset=utf-8"}
     url = dataConfig["url-backend-seguridad"] + '/usuarios'
-    response = requests.post(url, headers=headers, json=data)
+    response = requests.post(url, headers = headers, json = data)
 
     if response.status_code == 201:
         user = response.json()
-        expires = datetime.timedelta(seconds=60 * 60 * 24)
+        expires = datetime.timedelta(seconds = 60 * 60 * 24)
         access_token = create_access_token(
-            identity=user, expires_delta=expires)
+            identity = user, expires_delta = expires)
         return jsonify({"token": access_token, "user_id": user["_id"]})
     else:
         return jsonify({"msg": "Error en la creación del usuario"}), 400
-
 
 ##############
 # Middleware #
@@ -78,7 +75,7 @@ def before_request_callback():
         usuario=get_jwt_identity()
 
         if usuario["rol"] is not None:
-            tienePersmiso=validarPermiso(
+            tienePersmiso = validarPermiso(
                 endPoint, request.method, usuario["rol"]["_id"])
 
             if not tienePersmiso:
@@ -87,17 +84,17 @@ def before_request_callback():
         return jsonify({"message": "Permiso denegado"}), 401
 
 def limpiarURL(url):
-    partes=request.path.split("/")
+    partes = request.path.split("/")
 
     for laParte in partes:
         if re.search('\\d', laParte):
-            url=url.replace(laParte, "?")
+            url = url.replace(laParte, "?")
     return url
 
 def validarPermiso(endPoint, metodo, idRol):
     url=dataConfig["url-backend-seguridad"] + \
         "/permiso-rol/validar-permiso/rol/" + str(idRol)
-    tienePermiso=False
+    tienePermiso = False
     headers={"Content-Type": "application/json; charset=utf-8"}
     body={"url": endPoint, "metodo": metodo}
     response=requests.get(url, json = body, headers = headers)
@@ -105,7 +102,7 @@ def validarPermiso(endPoint, metodo, idRol):
     try:
         data=response.json()
         if ("_id" in data):
-            tienePermiso=True
+            tienePermiso = True
     except:
         pass
     return tienePermiso
@@ -306,12 +303,12 @@ def modificarResultado(id_resultado, id_mesa, id_candidato):
 
 @ app.route("/candidatos/<string:id>/partido/<string:id_partido>", methods = ['PUT'])
 def asignarPartidoACandidato(id, id_partido):
-    data=request.get_json()
-    headers={"Content-Type": "application/json; charset=utf-8"}
-    url=dataConfig["url-backend-registraduria"] + \
+    data = request.get_json()
+    headers = {"Content-Type": "application/json; charset=utf-8"}
+    url = dataConfig["url-backend-registraduria"] + \
         '/candidatos/' + id + '/partido/' + id_partido
-    response=requests.put(url, headers = headers, json = data)
-    json=response.json()
+    response = requests.put(url, headers = headers, json = data)
+    json = response.json()
     return jsonify(json)
 
 ######################
@@ -320,8 +317,8 @@ def asignarPartidoACandidato(id, id_partido):
 
 @ app.route("/", methods = ['GET'])
 def test():
-    json={}
-    json["message"]="Servidor corriendo..."
+    json = {}
+    json["message"] = "Servidor corriendo..."
     return jsonify(json)
 
 #################
@@ -330,7 +327,7 @@ def test():
 
 def loadFileConfig():
     with open('config.json') as f:
-        data=json.load(f)
+        data = json.load(f)
     return data
 
 if __name__ == '__main__':

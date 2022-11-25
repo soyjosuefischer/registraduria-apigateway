@@ -10,7 +10,7 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-Database-green?logo=mongodb)
 
 # API GATEWAY DEL PROYECTO
-### VOTACIONES 2022
+### ELECCIONES 2022
 
 <br>
 
